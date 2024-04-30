@@ -155,10 +155,18 @@ class _BrowsePageState extends State<BrowsePage> {
                 );
               },
               decoration: InputDecoration(
-                icon: Icon(
-                  IconlyLight.search,
+                icon: Container(
+                  height: 45,
+                  width: 45,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Color(0xffffff00),
+                  ),
+                  child: Icon(
+                    IconlyLight.search,
+                  ),
                 ),
-                iconColor: Color(0xffffff00),
+                iconColor: Colors.black,
                 hintText: 'Search #tags here...',
                 hintStyle: TextStyle(color: Colors.grey),
                 enabled: true,
@@ -392,12 +400,18 @@ class _BrowsePageState extends State<BrowsePage> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) => DetailPage(
-                                              imgUrl: songs[index]['imgUrl'],
-                                              logoUrl: songs[index]['logoUrl'],
-                                              name: songs[index]['name'],
-                                              youTube: songs[index]['youTube'],
-                                              tikTok: songs[index]['tikTok'],
-                                              title: songs[index]['title'],
+                                              imgUrl: filteredDataForSearch(
+                                                  searchText)[index]['imgUrl'],
+                                              logoUrl: filteredDataForSearch(
+                                                  searchText)[index]['logoUrl'],
+                                              name: filteredDataForSearch(
+                                                  searchText)[index]['name'],
+                                              youTube: filteredDataForSearch(
+                                                  searchText)[index]['youTube'],
+                                              tikTok: filteredDataForSearch(
+                                                  searchText)[index]['tikTok'],
+                                              title: filteredDataForSearch(
+                                                  searchText)[index]['title'],
                                               detail: filteredDataForSearch(
                                                       searchText)[index]
                                                   ['detailPage'],

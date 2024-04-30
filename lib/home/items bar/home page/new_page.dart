@@ -43,16 +43,19 @@ class _NewPageState extends State<NewPage> {
                         top: 5,
                         left: 5,
                         child: Container(
-                          width: 50,
-                          height: 20,
+                          width: 30,
+                          height: 30,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
                             color: Colors.yellow,
                           ),
                           child: Center(
                             child: Text(
-                              "new",
-                              style: TextStyle(color: Colors.black),
+                              "NEW",
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),

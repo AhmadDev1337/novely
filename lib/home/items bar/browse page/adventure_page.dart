@@ -1,6 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:iconly/iconly.dart';
 
 class AdventurePage extends StatefulWidget {
   @override
@@ -9,6 +13,7 @@ class AdventurePage extends StatefulWidget {
 
 class _AdventurePageState extends State<AdventurePage> {
   late List<dynamic> browsers = [];
+  String searchText = '';
 
   @override
   void initState() {
@@ -30,30 +35,93 @@ class _AdventurePageState extends State<AdventurePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Stories'),
-      ),
-      body: browsers.isEmpty
-          ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: browsers.length,
-              itemBuilder: (context, index) {
-                final browser = browsers[index];
-                return ListTile(
-                  title: Text(browser['name']),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            DetailPage(detailPage: browser['detailPage']),
-                      ),
-                    );
-                  },
-                );
-              },
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: "Adventure",
+      home: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            children: [
+              Text(
+                "#Adventure",
+                style:
+                    TextStyle(color: Colors.grey, fontWeight: FontWeight.w700),
+              ),
+              SizedBox(width: 30),
+              Container(
+                height: 17,
+                width: 2,
+                color: Colors.grey,
+              ),
+            ],
+          ),
+          actions: [
+            Container(
+              margin: EdgeInsets.only(right: 10),
+              width: MediaQuery.of(context).size.width * 0.5,
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              height: 45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.grey),
+              ),
+              child: TextField(
+                cursorColor: Colors.white,
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+                onChanged: (value) {
+                  setState(
+                    () {
+                      searchText = value;
+                    },
+                  );
+                },
+                decoration: InputDecoration(
+                  icon: Icon(
+                    IconlyLight.search,
+                  ),
+                  iconColor: Color(0xffffff00),
+                  hintText: 'Search #tags here...',
+                  hintStyle: TextStyle(color: Colors.grey),
+                  enabled: true,
+                ),
+              ),
             ),
+          ],
+          elevation: 0,
+          backgroundColor: Color(0xff0d0d0d),
+        ),
+        backgroundColor: Color(0xff0d0d0d),
+        body: browsers.isEmpty
+            ? Center(
+                child: SpinKitThreeBounce(
+                  color: Color(0xffffff00),
+                  size: 25,
+                ),
+              )
+            : ListView.builder(
+                itemCount: browsers.length,
+                itemBuilder: (context, index) {
+                  final browser = browsers[index];
+                  return ListTile(
+                    title: Text(
+                      browser['name'],
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DetailPage(detailPage: browser['detailPage']),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+      ),
     );
   }
 }
