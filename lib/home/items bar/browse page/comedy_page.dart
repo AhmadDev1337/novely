@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -36,7 +36,10 @@ class _ComedyPageState extends State<ComedyPage> {
   List<dynamic> filteredDataForSearch(String searchText) {
     return stories.where((data) {
       String title = data['title'].toLowerCase();
-      return title.contains(searchText.toLowerCase());
+      String hashtag = data['hashtag'].toLowerCase();
+
+      return title.contains(searchText.toLowerCase()) ||
+          hashtag.contains(searchText.toLowerCase());
     }).toList();
   }
 
@@ -89,7 +92,7 @@ class _ComedyPageState extends State<ComedyPage> {
                     IconlyLight.search,
                   ),
                   iconColor: Color(0xffffff00),
-                  hintText: 'Search title here...',
+                  hintText: 'Search title or hashtag here...',
                   hintStyle: TextStyle(color: Colors.grey),
                   enabled: true,
                 ),
@@ -261,7 +264,25 @@ class _StoryDetailState extends State<StoryDetail> {
                     top: 15,
                     right: 20,
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Synopsis:'),
+                              content: Text(widget.synopsis),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Close'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
                       child: Icon(
                         Icons.info_sharp,
                         size: 25,
@@ -338,15 +359,23 @@ class _StoryDetailState extends State<StoryDetail> {
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         chapter['title'],
-                                        style: TextStyle(color: Colors.white),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17),
                                       ),
                                       SizedBox(height: 8),
                                       Text(
-                                        'Rating: ${chapter['rating']}',
-                                        style: TextStyle(color: Colors.white),
+                                        chapter['datePost'],
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 13,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -400,19 +429,84 @@ class ChapterDetail extends StatelessWidget {
                 SizedBox(width: 15),
                 Text(
                   chapter['title'],
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           ),
         ),
         backgroundColor: Color(0xff0d0d0d),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            chapter['content'],
-            style: TextStyle(color: Colors.white),
-          ),
+        body: ListView(
+          scrollDirection: Axis.vertical,
+          physics: BouncingScrollPhysics(),
+          children: [
+            Container(
+              padding: EdgeInsets.all(10),
+              height: 170,
+              child: Image.network(
+                chapter['thumbnail'],
+                fit: BoxFit.cover,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 17, left: 17, right: 17, bottom: 70),
+              child: Text(
+                chapter['content'],
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+            ),
+            Divider(
+              thickness: 0.5,
+              height: 0.5,
+              color: Color(0xffb4b4b4),
+            ),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 50,
+                    width: 50,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: Image.network(
+                        chapter['userPhoto'],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 15),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Writer:",
+                        style: TextStyle(color: Colors.white, fontSize: 13),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        chapter['userName'],
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

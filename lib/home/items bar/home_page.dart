@@ -43,8 +43,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         PopularPage(),
-        Container(
-          width: MediaQuery.of(context).size.width,
+        Divider(
+          thickness: 0.5,
           height: 0.5,
           color: Color(0xffb4b4b4),
         ),
