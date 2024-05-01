@@ -6,6 +6,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:iconly/iconly.dart';
 
+import 'genres/comedy/profile_writer_page.dart';
+
 class ComedyPage extends StatefulWidget {
   @override
   _ComedyPageState createState() => _ComedyPageState();
@@ -405,10 +407,17 @@ class _StoryDetailState extends State<StoryDetail> {
   }
 }
 
-class ChapterDetail extends StatelessWidget {
+class ChapterDetail extends StatefulWidget {
   final dynamic chapter;
 
   ChapterDetail({required this.chapter});
+
+  @override
+  State<ChapterDetail> createState() => _ChapterDetailState();
+}
+
+class _ChapterDetailState extends State<ChapterDetail> {
+  bool _isDarkMode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -417,28 +426,47 @@ class ChapterDetail extends StatelessWidget {
       title: "Comedy",
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xff0d0d0d),
-          title: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Icon(IconlyLight.arrow_left, color: Colors.white),
-                SizedBox(width: 15),
-                Text(
-                  chapter['title'],
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
+          backgroundColor: _isDarkMode ? Colors.white : Colors.black,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(IconlyLight.arrow_left,
+                        color: _isDarkMode ? Color(0xff0d0d0d) : Colors.white),
+                    SizedBox(width: 15),
+                    Text(
+                      widget.chapter['title'],
+                      style: TextStyle(
+                          color: _isDarkMode ? Color(0xff0d0d0d) : Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isDarkMode = !_isDarkMode;
+                  });
+                },
+                child: Icon(
+                  _isDarkMode
+                      ? Icons.dark_mode_rounded
+                      : Icons.light_mode_rounded,
+                  color: _isDarkMode ? Color(0xff0d0d0d) : Colors.white,
+                ),
+              ),
+            ],
           ),
         ),
-        backgroundColor: Color(0xff0d0d0d),
+        backgroundColor: _isDarkMode ? Colors.white : Color(0xff0d0d0d),
         body: ListView(
           scrollDirection: Axis.vertical,
           physics: BouncingScrollPhysics(),
@@ -447,7 +475,7 @@ class ChapterDetail extends StatelessWidget {
               padding: EdgeInsets.all(10),
               height: 170,
               child: Image.network(
-                chapter['thumbnail'],
+                widget.chapter['thumbnail'],
                 fit: BoxFit.cover,
               ),
             ),
@@ -455,9 +483,9 @@ class ChapterDetail extends StatelessWidget {
               padding: const EdgeInsets.only(
                   top: 17, left: 17, right: 17, bottom: 70),
               child: Text(
-                chapter['content'],
+                widget.chapter['content'],
                 style: TextStyle(
-                    color: Colors.white,
+                    color: _isDarkMode ? Color(0xff0d0d0d) : Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 16),
               ),
@@ -467,43 +495,54 @@ class ChapterDetail extends StatelessWidget {
               height: 0.5,
               color: Color(0xffb4b4b4),
             ),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 50,
-                    width: 50,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(50),
-                      child: Image.network(
-                        chapter['userPhoto'],
-                        fit: BoxFit.cover,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileWriterPage(),
+                  ),
+                );
+              },
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 50,
+                      width: 50,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Image.network(
+                          widget.chapter['userPhoto'],
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 15),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Writer:",
-                        style: TextStyle(color: Colors.white, fontSize: 13),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        chapter['userName'],
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15),
-                      ),
-                    ],
-                  ),
-                ],
+                    SizedBox(width: 15),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Writer:",
+                          style: TextStyle(color: _isDarkMode ? Color(0xff0d0d0d) : Colors.white, fontSize: 13),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          widget.chapter['userName'],
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: _isDarkMode ? Color(0xff0d0d0d) : Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
