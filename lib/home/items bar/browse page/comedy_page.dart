@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unused_local_variable, use_key_in_widget_constructors, avoid_unnecessary_containers, sized_box_for_whitespace, prefer_const_constructors_in_immutables, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -39,9 +39,23 @@ class _ComedyPageState extends State<ComedyPage> {
     return stories.where((data) {
       String title = data['title'].toLowerCase();
       String hashtag = data['hashtag'].toLowerCase();
+      bool chapterFound = false;
+
+      // Mencari di judul dan userName di setiap chapter
+      for (var chapter in data['chapters']) {
+        String chapterTitle = chapter['title'].toLowerCase();
+        String userName = chapter['userName'].toLowerCase();
+
+        if (chapterTitle.contains(searchText.toLowerCase()) ||
+            userName.contains(searchText.toLowerCase())) {
+          chapterFound = true;
+          break;
+        }
+      }
 
       return title.contains(searchText.toLowerCase()) ||
-          hashtag.contains(searchText.toLowerCase());
+          hashtag.contains(searchText.toLowerCase()) ||
+          chapterFound; // Menambahkan hasil pencarian di chapter
     }).toList();
   }
 
@@ -126,6 +140,8 @@ class _ComedyPageState extends State<ComedyPage> {
                                 ['title'],
                             synopsis: filteredDataForSearch(searchText)[index]
                                 ['synopsis'],
+                            hashtag: filteredDataForSearch(searchText)[index]
+                                ['hashtag'],
                             thumbnail: filteredDataForSearch(searchText)[index]
                                 ['thumbnail'],
                             detail: filteredDataForSearch(searchText)[index]
@@ -143,13 +159,9 @@ class _ComedyPageState extends State<ComedyPage> {
                           Container(
                             height: 120,
                             width: 120,
-                            child: ClipRRect(
+                            decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                filteredDataForSearch(searchText)[index]
-                                    ['thumbnail'],
-                                fit: BoxFit.cover,
-                              ),
+                              color: Colors.grey,
                             ),
                           ),
                           SizedBox(
@@ -213,11 +225,13 @@ class _ComedyPageState extends State<ComedyPage> {
 class StoryDetail extends StatefulWidget {
   final String title;
   final String synopsis;
+  final String hashtag;
   final String thumbnail;
   final List<dynamic> detail;
 
   StoryDetail({
     required this.title,
+    required this.hashtag,
     required this.synopsis,
     required this.thumbnail,
     required this.detail,
@@ -241,13 +255,10 @@ class _StoryDetailState extends State<StoryDetail> {
           children: [
             Container(
               height: 250,
+              color: Colors.grey,
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network(
-                    widget.thumbnail,
-                    fit: BoxFit.fill,
-                  ),
                   Positioned(
                     top: 15,
                     left: 20,
@@ -311,6 +322,14 @@ class _StoryDetailState extends State<StoryDetail> {
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 25,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          widget.hashtag,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
                               fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -474,10 +493,7 @@ class _ChapterDetailState extends State<ChapterDetail> {
             Container(
               padding: EdgeInsets.all(10),
               height: 170,
-              child: Image.network(
-                widget.chapter['thumbnail'],
-                fit: BoxFit.cover,
-              ),
+              color: Colors.grey,
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -512,12 +528,9 @@ class _ChapterDetailState extends State<ChapterDetail> {
                     Container(
                       height: 50,
                       width: 50,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Image.network(
-                          widget.chapter['userPhoto'],
-                          fit: BoxFit.cover,
-                        ),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey,
                       ),
                     ),
                     SizedBox(width: 15),
@@ -526,7 +539,11 @@ class _ChapterDetailState extends State<ChapterDetail> {
                       children: [
                         Text(
                           "Writer:",
-                          style: TextStyle(color: _isDarkMode ? Color(0xff0d0d0d) : Colors.white, fontSize: 13),
+                          style: TextStyle(
+                              color: _isDarkMode
+                                  ? Color(0xff0d0d0d)
+                                  : Colors.white,
+                              fontSize: 13),
                         ),
                         SizedBox(
                           height: 5,
@@ -535,7 +552,9 @@ class _ChapterDetailState extends State<ChapterDetail> {
                           widget.chapter['userName'],
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              color: _isDarkMode ? Color(0xff0d0d0d) : Colors.white,
+                              color: _isDarkMode
+                                  ? Color(0xff0d0d0d)
+                                  : Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 15),
                         ),

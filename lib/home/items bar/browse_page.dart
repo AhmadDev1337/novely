@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, use_key_in_widget_constructors, avoid_unnecessary_containers, prefer_const_constructors_in_immutables
 
 import "dart:convert";
 
@@ -380,12 +380,12 @@ class _BrowsePageState extends State<BrowsePage> {
                           child: Stack(
                             fit: StackFit.expand,
                             children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  filteredDataForSearch(searchText)[index]
-                                      ['imgUrl'],
-                                  fit: BoxFit.cover,
+                              Container(
+                                height: MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.grey,
                                 ),
                               ),
                               Positioned(
@@ -426,21 +426,6 @@ class _BrowsePageState extends State<BrowsePage> {
                                           borderRadius:
                                               BorderRadius.circular(250),
                                           color: Colors.grey.shade900,
-                                        ),
-                                        child: Stack(
-                                          fit: StackFit.expand,
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(250),
-                                              child: Image.network(
-                                                filteredDataForSearch(
-                                                        searchText)[index]
-                                                    ['logoUrl'],
-                                                fit: BoxFit.fill,
-                                              ),
-                                            ),
-                                          ],
                                         ),
                                       ),
                                     ),
@@ -589,11 +574,12 @@ class _DetailPageState extends State<DetailPage> {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          widget.imgUrl,
-                          fit: BoxFit.fill,
+                      Container(
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey,
                         ),
                       ),
                     ],
@@ -608,20 +594,8 @@ class _DetailPageState extends State<DetailPage> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(250),
                           color: Colors.grey.shade900,
-                        ),
-                        child: Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(250),
-                              child: Image.network(
-                                widget.logoUrl,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ],
+                          shape: BoxShape.circle,
                         ),
                       ),
                       SizedBox(
@@ -721,15 +695,12 @@ class _DetailPageState extends State<DetailPage> {
                         onTap: () {},
                         child: Row(
                           children: [
-                            SizedBox(
-                              width: 130,
+                            Container(
                               height: 80,
-                              child: ClipRRect(
+                              width: 130,
+                              decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  filteredData[index]['thumbnail'],
-                                  fit: BoxFit.cover,
-                                ),
+                                color: Colors.grey,
                               ),
                             ),
                             SizedBox(width: 10),
