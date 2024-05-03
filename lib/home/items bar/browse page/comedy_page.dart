@@ -6,8 +6,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:iconly/iconly.dart';
 
-import 'genres/comedy/profile_writer_page.dart';
-
 class ComedyPage extends StatefulWidget {
   @override
   _ComedyPageState createState() => _ComedyPageState();
@@ -511,57 +509,45 @@ class _ChapterDetailState extends State<ChapterDetail> {
               height: 0.5,
               color: Color(0xffb4b4b4),
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfileWriterPage(),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.grey,
+                    ),
                   ),
-                );
-              },
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey,
+                  SizedBox(width: 15),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Writer:",
+                        style: TextStyle(
+                            color:
+                                _isDarkMode ? Color(0xff0d0d0d) : Colors.white,
+                            fontSize: 13),
                       ),
-                    ),
-                    SizedBox(width: 15),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Writer:",
-                          style: TextStyle(
-                              color: _isDarkMode
-                                  ? Color(0xff0d0d0d)
-                                  : Colors.white,
-                              fontSize: 13),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          widget.chapter['userName'],
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              color: _isDarkMode
-                                  ? Color(0xff0d0d0d)
-                                  : Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        widget.chapter['userName'],
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color:
+                                _isDarkMode ? Color(0xff0d0d0d) : Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],

@@ -37,9 +37,23 @@ class _FamilyPageState extends State<FamilyPage> {
     return stories.where((data) {
       String title = data['title'].toLowerCase();
       String hashtag = data['hashtag'].toLowerCase();
+      bool chapterFound = false;
+
+      // Mencari di judul dan userName di setiap chapter
+      for (var chapter in data['chapters']) {
+        String chapterTitle = chapter['title'].toLowerCase();
+        String userName = chapter['userName'].toLowerCase();
+
+        if (chapterTitle.contains(searchText.toLowerCase()) ||
+            userName.contains(searchText.toLowerCase())) {
+          chapterFound = true;
+          break;
+        }
+      }
 
       return title.contains(searchText.toLowerCase()) ||
-          hashtag.contains(searchText.toLowerCase());
+          hashtag.contains(searchText.toLowerCase()) ||
+          chapterFound; // Menambahkan hasil pencarian di chapter
     }).toList();
   }
 
@@ -429,7 +443,7 @@ class _ChapterDetailState extends State<ChapterDetail> {
       title: "Family",
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: _isDarkMode ? Colors.white : Colors.black,
+          backgroundColor: _isDarkMode ? Color(0xfff2f2f2) : Colors.black,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -469,7 +483,7 @@ class _ChapterDetailState extends State<ChapterDetail> {
             ],
           ),
         ),
-        backgroundColor: _isDarkMode ? Colors.white : Color(0xff0d0d0d),
+        backgroundColor: _isDarkMode ? Color(0xfff2f2f2) : Color(0xff0d0d0d),
         body: ListView(
           scrollDirection: Axis.vertical,
           physics: BouncingScrollPhysics(),

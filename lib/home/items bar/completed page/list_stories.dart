@@ -2,23 +2,27 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:iconly/iconly.dart';
 
-class NewPage extends StatefulWidget {
-  const NewPage({Key? key}) : super(key: key);
+class ListStoriesCompletedPage extends StatefulWidget {
+  const ListStoriesCompletedPage({Key? key}) : super(key: key);
 
   @override
-  State<NewPage> createState() => _NewPageState();
+  State<ListStoriesCompletedPage> createState() =>
+      _ListStoriesCompletedPageState();
 }
 
-class _NewPageState extends State<NewPage> {
+class _ListStoriesCompletedPageState extends State<ListStoriesCompletedPage> {
   late List<dynamic> stories = [];
+  int currentPage = 0;
+  int itemsPerPage = 12;
 
   Future<void> fetchStories() async {
     final response =
-        await http.get(Uri.parse('https://pastebin.com/raw/L1mi3Zrw'));
+        await http.get(Uri.parse('https://pastebin.com/raw/sR03t5mG'));
     if (response.statusCode == 200) {
       setState(() {
         stories = json.decode(response.body)['stories'];
@@ -34,108 +38,190 @@ class _NewPageState extends State<NewPage> {
     fetchStories();
   }
 
+  List<dynamic> getCurrentPageStories() {
+    final startIndex = currentPage * itemsPerPage;
+    final endIndex = startIndex + itemsPerPage;
+    return stories.sublist(
+        startIndex, endIndex > stories.length ? stories.length : endIndex);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
-      width: MediaQuery.of(context).size.width,
-      child: stories.isEmpty
-          ? Center(
-              child: SpinKitThreeBounce(
-                color: Color(0xffffff00),
-                size: 25,
-              ),
-            )
-          : ListView.builder(
-              scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              itemCount: stories.length,
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => StoryDetail(
-                          title: stories[index]['title'],
-                          synopsis: stories[index]['synopsis'],
-                          hashtag: stories[index]['hashtag'],
-                          thumbnail: stories[index]['thumbnail'],
-                          detail: stories[index]['chapters'],
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 8),
-                    width: 130,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          height: 130,
-                          width: 130,
-                          child: Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Color(0xffb4b4b4),
-                                ),
-                              ),
-                              Positioned(
-                                top: 5,
-                                left: 5,
-                                child: Container(
-                                  width: 30,
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50),
-                                    color: Colors.yellow,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "NEW",
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+      padding: EdgeInsets.only(bottom: 30),
+      child: Column(
+        children: [
+          stories.isEmpty
+              ? Center(
+                  child: SpinKitThreeBounce(
+                    color: Color(0xffffff00),
+                    size: 25,
+                  ),
+                )
+              : AnimationLimiter(
+                  child: AnimationConfiguration.synchronized(
+                    duration: const Duration(milliseconds: 400),
+                    child: SlideAnimation(
+                      duration: Duration(milliseconds: 250),
+                      curve: Curves.decelerate,
+                      child: FadeInAnimation(
+                        child: GridView.builder(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                          ),
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 5,
+                            childAspectRatio:
+                                MediaQuery.of(context).size.width / 700,
+                          ),
+                          itemCount: getCurrentPageStories().length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final currentStory = getCurrentPageStories()[index];
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => StoryDetail(
+                                      title: stories[index]['title'],
+                                      synopsis: stories[index]['synopsis'],
+                                      hashtag: stories[index]['hashtag'],
+                                      genre: stories[index]['genre'],
+                                      thumbnail: stories[index]['thumbnail'],
+                                      detail: stories[index]['chapters'],
                                     ),
                                   ),
+                                );
+                              },
+                              child: Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: 130,
+                                      child: Stack(
+                                        fit: StackFit.expand,
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              color: Color(0xffb4b4b4),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: 5,
+                                            left: 5,
+                                            child: Container(
+                                              width: 30,
+                                              height: 30,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                                color: Colors.yellow,
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  "END",
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10),
+                                      child: Text(
+                                        currentStory['title'],
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 15),
+                                      ),
+                                    ),
+                                    Text(
+                                      currentStory['caption'],
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                          color: Color(0xffffff00),
+                                          fontSize: 10),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
+                            );
+                          },
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10),
-                          child: Text(
-                            stories[index]['title'],
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(color: Colors.white, fontSize: 15),
-                          ),
-                        ),
-                        Text(
-                          stories[index]['caption'],
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style:
-                              TextStyle(color: Color(0xffffff00), fontSize: 10),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                );
-              },
+                ),
+          SizedBox(
+            height: 15,
+          ),
+          if (stories.length > itemsPerPage)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (currentPage > 0)
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        currentPage--;
+                      });
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Color(0xffffff00),
+                      ),
+                      child: Center(child: Icon(Icons.arrow_back_ios)),
+                    ),
+                  ),
+                if (currentPage < (stories.length - 1) ~/ itemsPerPage)
+                  SizedBox(width: 10),
+                if (currentPage < (stories.length - 1) ~/ itemsPerPage)
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        currentPage++;
+                      });
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Color(0xffffff00),
+                      ),
+                      child: Center(
+                        child: Icon(Icons.arrow_forward_ios),
+                      ),
+                    ),
+                  ),
+              ],
             ),
+        ],
+      ),
     );
   }
 }
@@ -144,12 +230,14 @@ class StoryDetail extends StatefulWidget {
   final String title;
   final String synopsis;
   final String hashtag;
+  final String genre;
   final String thumbnail;
   final List<dynamic> detail;
 
   StoryDetail({
     required this.title,
     required this.hashtag,
+    required this.genre,
     required this.synopsis,
     required this.thumbnail,
     required this.detail,
@@ -228,7 +316,7 @@ class _StoryDetailState extends State<StoryDetail> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Romance",
+                          widget.genre,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 15,
