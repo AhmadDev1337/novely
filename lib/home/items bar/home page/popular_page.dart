@@ -17,7 +17,7 @@ class PopularPage extends StatefulWidget {
 class _PopularPageState extends State<PopularPage> {
   late List<dynamic> stories = [];
   int currentPage = 0;
-  int itemsPerPage = 12;
+  int itemsPerPage = 6;
 
   Future<void> fetchStories() async {
     final response =
@@ -47,7 +47,7 @@ class _PopularPageState extends State<PopularPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: 30),
+      padding: EdgeInsets.only(bottom: 10),
       child: Column(
         children: [
           stories.isEmpty
@@ -175,48 +175,57 @@ class _PopularPageState extends State<PopularPage> {
             height: 15,
           ),
           if (stories.length > itemsPerPage)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (currentPage > 0)
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        currentPage--;
-                      });
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Color(0xffffff00),
-                      ),
-                      child: Center(child: Icon(Icons.arrow_back_ios)),
-                    ),
-                  ),
-                if (currentPage < (stories.length - 1) ~/ itemsPerPage)
-                  SizedBox(width: 10),
-                if (currentPage < (stories.length - 1) ~/ itemsPerPage)
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        currentPage++;
-                      });
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Color(0xffffff00),
-                      ),
-                      child: Center(
-                        child: Icon(Icons.arrow_forward_ios),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  if (currentPage > 0)
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          currentPage--;
+                        });
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.arrow_back_ios,
+                            color: Color(0xffffff00),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-              ],
+                  if (currentPage < (stories.length - 1) ~/ itemsPerPage)
+                    SizedBox(width: 10),
+                  if (currentPage < (stories.length - 1) ~/ itemsPerPage)
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          currentPage++;
+                        });
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Color(0xffffff00),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
         ],
       ),

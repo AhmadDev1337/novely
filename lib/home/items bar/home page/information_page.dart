@@ -57,6 +57,9 @@ class _InformationPageState extends State<InformationPage> {
                 onTap: () => launchURL(
                     "https://www.instagram.com/ahmad_dev1337/?igsh=MzNINGNkZWQ4Mg=="),
                 child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                   child: Image.asset(
                     "assets/icons/instagram.png",
@@ -70,6 +73,9 @@ class _InformationPageState extends State<InformationPage> {
                 onTap: () => launchURL(
                     "https://www.tiktok.com/@arr_1337?_t=8lvObQ6A8qv&_r=1"),
                 child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                   child: Image.asset(
                     "assets/icons/tik-tok.png",
@@ -83,9 +89,27 @@ class _InformationPageState extends State<InformationPage> {
                 onTap: () => launchURL(
                     "https://www.tiktok.com/@arr_1337?_t=8lvObQ6A8qv&_r=1"),
                 child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                   child: Image.asset(
                     "assets/icons/twitter.png",
+                    width: 25,
+                    height: 25,
+                    color: Color(0xffb4b4b4),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () => launchURL("mailto:ahmadxploit@gmail.com"),
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Image.asset(
+                    "assets/icons/envelope.png",
                     width: 25,
                     height: 25,
                     color: Color(0xffb4b4b4),

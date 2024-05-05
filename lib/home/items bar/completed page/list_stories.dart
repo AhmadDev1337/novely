@@ -147,7 +147,7 @@ class _ListStoriesCompletedPageState extends State<ListStoriesCompletedPage> {
                                     ),
                                     Padding(
                                       padding:
-                                          EdgeInsets.symmetric(vertical: 10),
+                                          EdgeInsets.only(top: 10, bottom: 5),
                                       child: Text(
                                         currentStory['title'],
                                         overflow: TextOverflow.ellipsis,
@@ -156,12 +156,31 @@ class _ListStoriesCompletedPageState extends State<ListStoriesCompletedPage> {
                                       ),
                                     ),
                                     Text(
-                                      currentStory['caption'],
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
+                                      currentStory['genre'],
                                       style: TextStyle(
+                                          color: Colors.grey, fontSize: 13),
+                                    ),
+                                    SizedBox(height: 8),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Icon(
+                                          Icons.star,
+                                          size: 10,
                                           color: Color(0xffffff00),
-                                          fontSize: 10),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          currentStory['rating'],
+                                          style: TextStyle(
+                                            color: Color(0xffffff00),
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

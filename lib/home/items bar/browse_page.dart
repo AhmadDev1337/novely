@@ -5,6 +5,7 @@ import "dart:convert";
 import "package:flutter/material.dart";
 import "package:flutter_spinkit/flutter_spinkit.dart";
 import "package:flutter_staggered_animations/flutter_staggered_animations.dart";
+import "package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart";
 import 'package:http/http.dart' as http;
 import "package:iconly/iconly.dart";
 import "package:novely/home/items%20bar/browse%20page/fan-fiction_page.dart";
@@ -24,7 +25,7 @@ import "browse page/romance_page.dart";
 import "browse page/thriller_page.dart";
 
 class BrowsePage extends StatefulWidget {
-  const BrowsePage({super.key});
+  BrowsePage({super.key});
 
   @override
   State<BrowsePage> createState() => _BrowsePageState();
@@ -153,7 +154,6 @@ class _BrowsePageState extends State<BrowsePage> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      physics: BouncingScrollPhysics(),
       shrinkWrap: true,
       children: [
         Center(
@@ -359,113 +359,176 @@ class _BrowsePageState extends State<BrowsePage> {
         ),
         Padding(
           padding: EdgeInsets.only(bottom: 10, left: 10, top: 25),
-          child: Text(
-            "Random Stories",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-              fontSize: 20,
+          child: RichText(
+            text: TextSpan(
+              text: 'Random ',
+              style: TextStyle(
+                color: Color(0xffffffff),
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: 'stories',
+                  style: TextStyle(
+                    color: Color(0xffffff00),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
-        AnimationLimiter(
-          child: AnimationConfiguration.synchronized(
-            duration: const Duration(milliseconds: 400),
-            child: SlideAnimation(
-              curve: Curves.decelerate,
-              child: FadeInAnimation(
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 20),
-                  child: bankNovels.isEmpty
-                      ? Center(
-                          child: SpinKitThreeBounce(
-                            color: Color(0xffffff00),
-                            size: 25,
-                          ),
-                        )
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: filteredDataForSearch(searchText).length,
-                          itemBuilder: (context, index) {
-                            final bankNovel =
-                                filteredDataForSearch(searchText)[index];
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => UserStoriesPage(
-                                      userName: filteredDataForSearch(
-                                          searchText)[index]['userName'],
-                                      instagram: filteredDataForSearch(
-                                          searchText)[index]['instagram'],
-                                      statusBio: filteredDataForSearch(
-                                          searchText)[index]['statusBio'],
-                                      detail: filteredDataForSearch(
-                                          searchText)[index]['stories'],
+        bankNovels.isEmpty
+            ? Center(
+                child: SpinKitThreeBounce(
+                  color: Color(0xffffff00),
+                  size: 25,
+                ),
+              )
+            : AnimationLimiter(
+                child: AnimationConfiguration.synchronized(
+                  duration: Duration(milliseconds: 400),
+                  child: SlideAnimation(
+                    curve: Curves.decelerate,
+                    child: FadeInAnimation(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: StaggeredGrid.count(
+                          crossAxisCount: 2,
+                          children: List.generate(
+                            filteredDataForSearch(searchText).length > 10
+                                ? 10
+                                : filteredDataForSearch(searchText).length,
+                            (index) {
+                              final bankNovel =
+                                  filteredDataForSearch(searchText)[index];
+                              int id = bankNovel['id'];
+                              Widget staggeredTile;
+                              switch (id) {
+                                case 0:
+                                  staggeredTile = Container(
+                                    width: 150,
+                                    height: 157,
+                                    color: Colors.grey,
+                                    child: Center(child: Text(id.toString())),
+                                  );
+                                  break;
+                                case 1:
+                                  staggeredTile = Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                    height: 200,
+                                    color: Colors.grey,
+                                    child: Center(child: Text(id.toString())),
+                                  );
+                                  break;
+                                case 2:
+                                  staggeredTile = Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.2,
+                                    height: 100,
+                                    color: Colors.grey,
+                                    child: Center(child: Text(id.toString())),
+                                  );
+                                  break;
+                                case 3:
+                                  staggeredTile = Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    height: 250,
+                                    color: Colors.grey,
+                                    child: Center(child: Text(id.toString())),
+                                  );
+                                  break;
+                                case 4:
+                                  staggeredTile = Container(
+                                    width: 100,
+                                    height: 100,
+                                    color: Colors.grey,
+                                    child: Center(child: Text(id.toString())),
+                                  );
+                                  break;
+                                case 5:
+                                  staggeredTile = Container(
+                                    width: 250,
+                                    height: 180,
+                                    color: Colors.grey,
+                                    child: Center(child: Text(id.toString())),
+                                  );
+                                  break;
+                                case 6:
+                                  staggeredTile = Container(
+                                    width: 250,
+                                    height: 180,
+                                    color: Colors.grey,
+                                    child: Center(child: Text(id.toString())),
+                                  );
+                                  break;
+                                case 7:
+                                  staggeredTile = Container(
+                                    width: 30,
+                                    height: 121,
+                                    color: Colors.grey,
+                                    child: Center(child: Text(id.toString())),
+                                  );
+                                  break;
+                                case 8:
+                                  staggeredTile = Container(
+                                    width: 30,
+                                    height: 122,
+                                    color: Colors.grey,
+                                    child: Center(child: Text(id.toString())),
+                                  );
+                                  break;
+                                case 9:
+                                  staggeredTile = Container(
+                                    width: 900,
+                                    height: 250,
+                                    color: Colors.grey,
+                                    child: Center(child: Text(id.toString())),
+                                  );
+                                  break;
+                                default:
+                                  staggeredTile = SizedBox();
+                                  break;
+                              }
+
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => UserStoriesPage(
+                                        userName: bankNovel['userName'],
+                                        instagram: bankNovel['instagram'],
+                                        statusBio: bankNovel['statusBio'],
+                                        detail: bankNovel['stories'],
+                                      ),
                                     ),
+                                  );
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
                                   ),
-                                );
-                              },
-                              child: Container(
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 20),
-                                height: 120,
-                                width: MediaQuery.of(context).size.width,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      height: 120,
-                                      width: 120,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 25,
-                                    ),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            filteredDataForSearch(
-                                                searchText)[index]['userName'],
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                          SizedBox(height: 5),
-                                          Row(
-                                            children: [
-                                              Icon(
-                                                Icons.star,
-                                                size: 13,
-                                                color: Color(0xffffff00),
-                                              ),
-                                              SizedBox(width: 5),
-                                            ],
-                                          ),
-                                          SizedBox(height: 8),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      staggeredTile, // Menampilkan StaggeredGridTile sesuai dengan ID
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -745,8 +808,8 @@ class _ChapterDetailState extends State<ChapterDetail> {
               color: Colors.grey,
             ),
             Padding(
-              padding: const EdgeInsets.only(
-                  top: 17, left: 17, right: 17, bottom: 70),
+              padding:
+                  EdgeInsets.only(top: 17, left: 17, right: 17, bottom: 70),
               child: Text(
                 widget.chapter['content'],
                 style: TextStyle(
