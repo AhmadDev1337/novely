@@ -115,13 +115,13 @@ class _HomePageState extends State<HomePage> {
     Timer.periodic(Duration(seconds: 3), (Timer timer) {
       if (_pageController.page! < promotions.length - 1) {
         _pageController.nextPage(
-          duration: Duration(seconds: 3),
+          duration: Duration(seconds: 1),
           curve: Curves.easeIn,
         );
       } else {
         _pageController.animateToPage(
           0,
-          duration: Duration(seconds: 3),
+          duration: Duration(seconds: 1),
           curve: Curves.easeIn,
         );
       }

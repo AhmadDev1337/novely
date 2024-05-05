@@ -39,7 +39,7 @@ class _BarControllerState extends State<BarController> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: "Novely",
+      title: "U-Novel",
       home: Scaffold(
         appBar: AppBar(
           title: Padding(
@@ -48,7 +48,7 @@ class _BarControllerState extends State<BarController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Novely",
+                  "U-Novel",
                   style: TextStyle(
                       color: Color(0xffffff00),
                       fontWeight: FontWeight.w800,
